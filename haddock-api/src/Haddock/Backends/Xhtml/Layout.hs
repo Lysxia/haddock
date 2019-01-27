@@ -202,12 +202,12 @@ subInstances :: Maybe Package -> Qualification
              -> LinksInfo -> Bool
              -> DetailsState -- ^ Collapse instance lists
              -> [(SubDecl, Maybe Module, Located DocName)] -> Html
-subInstances pkg qual nm lnks splice dtls = maybe noHtml wrap . instTable
+subInstances pkg qual nm lnks splice dtls is = maybe noHtml wrap (instTable is)
   where
     wrap contents = subSection (hdr +++ collapseDetails id_ dtls (summary +++ contents))
     instTable = subTableSrc pkg qual lnks splice
     subSection = thediv ! [theclass "subs instances"]
-    hdr = h4 ! collapseControl id_ "instances" << "Instances"
+    hdr = h4 ! collapseControl id_ "instances" << ("Instances (" ++ show (length is) ++ ")")
     summary = thesummary ! [ theclass "hide-when-js-enabled" ] << "Instances details"
     id_ = makeAnchorId $ "i:" ++ nm
 
